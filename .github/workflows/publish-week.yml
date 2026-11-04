@@ -1,0 +1,32 @@
+name: Wochenplan donnerstags veroeffentlichen
+
+on:
+  schedule:
+    # UTC: 06:00 Sommerzeit / 07:00 Winterzeit.
+    # Beide Zeiten laufen, Python prueft lokale Uhrzeit und die Freigabe.
+    - cron: "0 6,7,8 * * 4"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: wochenplan-veroeffentlichung
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+      - name: Python einrichten
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Firebase Admin installieren
+        run: python -m pip install --disable-pip-version-check "firebase-admin>=6.5,<8"
+      - name: Freigegebenen Wochenplan pruefen und ggf. veroeffentlichen
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: python scripts/publish_week.py
