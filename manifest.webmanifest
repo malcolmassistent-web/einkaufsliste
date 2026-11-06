@@ -1,11 +1,19 @@
 {
-  "name": "Malcolm & Nele · Unsere Küche",
-  "short_name": "Unsere Küche",
+  "name": "Nele & Mal Küche",
+  "short_name": "Nele & Mal",
   "description": "Gemeinsamer Wochenplan und Einkaufsliste",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f8f9f5",
   "theme_color": "#183e2b",
-  "lang": "de"
+  "lang": "de",
+  "icons": [
+    {
+      "src": "./app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
 }
