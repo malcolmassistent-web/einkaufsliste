@@ -69,7 +69,7 @@ $('logout').onclick=()=>signOut(auth);
 onAuthStateChanged(auth,user=>{
  if(stop){stop();stop=null}if(stopWeek){stopWeek();stopWeek=null}live.clear();showAccess(false);currentUser=user;$('login-card').classList.toggle('signed-in-compact',!!user);$('week-admin').hidden=!user||user.uid!==adminUid;
  $('signed-out').hidden=!!user;$('signed-in').hidden=!user;
- if(!user){$('app-overview').style.display='none';status('Bitte anmelden.');return} $('app-overview').style.display='block';
+ if(!user){setPanel('overview');status('Bitte anmelden.');return}
  $('account').textContent=user.email||'Angemeldet';
  status('Angemeldet. Benutzer-ID (UID): '+user.uid+' – prüfe Datenbankfreigabe …');
  stopWeek=onSnapshot(weekRef,snap=>{if(snap.exists())renderWeek(snap.data());else restoreOriginal()},e=>status(errorMessage(e)));
@@ -77,7 +77,7 @@ onAuthStateChanged(auth,user=>{
  stop=onSnapshot(itemsRef,async snap=>{
   if(first && snap.empty){first=false;try{const batch=writeBatch(db);initial.forEach((name,i)=>batch.set(doc(itemsRef,`item-${String(i+1).padStart(2,'0')}`),{name,checked:false,order:i}));await batch.commit();status('Einkaufsliste eingerichtet.');}catch(e){status(errorMessage(e))}return}
   first=false;live=new Map(snap.docs.map(d=>[d.id,{...d.data(),id:d.id}]));
-  const container=document.querySelector('section.card:nth-of-type(2)');
+  const container=document.getElementById('shopping-panel');
   const existing=[...container.querySelectorAll('label.item')];
   const sorted=[...live.values()].sort((a,b)=>(a.order??999)-(b.order??999)||a.name.localeCompare(b.name,'de'));
   const seen=new Set();
