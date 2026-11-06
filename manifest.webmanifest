@@ -1,0 +1,11 @@
+{
+  "name": "Malcolm & Nele · Unsere Küche",
+  "short_name": "Unsere Küche",
+  "description": "Gemeinsamer Wochenplan und Einkaufsliste",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f8f9f5",
+  "theme_color": "#183e2b",
+  "lang": "de"
+}
