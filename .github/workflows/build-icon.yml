@@ -1,0 +1,32 @@
+name: App-Icon für iPhone erzeugen
+on:
+  push:
+    branches: [main]
+    paths:
+      - app-icon.svg
+      - .github/workflows/build-icon.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build-icon:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: PNG-Icons aus SVG erzeugen
+        run: |
+          python -m pip install cairosvg
+          python - <<'PY'
+          import cairosvg
+          for size in (180,192,512):
+              cairosvg.svg2png(url='app-icon.svg',write_to=f'app-icon-{size}.png',output_width=size,output_height=size)
+          PY
+      - name: Icons veröffentlichen
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app-icon-180.png app-icon-192.png app-icon-512.png
+          git diff --cached --quiet || (git commit -m "iPhone- und PWA-Icons generieren" && git push)
