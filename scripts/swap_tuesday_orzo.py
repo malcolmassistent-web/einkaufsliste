@@ -57,7 +57,7 @@ def apply(tx):
         return
     if not isinstance(recipes[1], str) or not recipes[1].startswith(OLD_RECIPE_START):
         raise RuntimeError("Tuesday recipe changed; refusing to overwrite")
-    snapshots = list(tx.get(items_ref))
+    snapshots = list(tx.get(items_ref.order_by('name')))
     by_name = {}
     for snap in snapshots:
         data = snap.to_dict()
