@@ -1,10 +1,12 @@
-name: Wochenplan donnerstags veroeffentlichen
+name: Wochenplan donnerstags oder sonntags veroeffentlichen
 
 on:
   schedule:
     # UTC: 06:00 Sommerzeit / 07:00 Winterzeit.
     # Beide Zeiten laufen, Python prueft lokale Uhrzeit und die Freigabe.
     - cron: "0 6,7,8 * * 4"
+    # Sonntags vor Wochenbeginn, 08:00/09:00/10:00 MEZ (Winterzeit).
+    - cron: "0 7,8,9 * * 0"
   workflow_dispatch:
 
 permissions:
