@@ -20,8 +20,8 @@ def fail(message):
 
 def main():
     now = datetime.now(TZ)
-    if now.weekday() != 3 or now.hour < 8:
-        fail("Only Thursdays after 08:00 Europe/Berlin are eligible.")
+    if now.weekday() not in (3, 6) or now.hour < 8:
+        fail("Only Thursdays or Sundays after 08:00 Europe/Berlin are eligible.")
     if not PLAN_PATH.is_file():
         fail("No approved plan file exists.")
     plan = json.loads(PLAN_PATH.read_text(encoding="utf-8"))
@@ -33,7 +33,7 @@ def main():
         fail("Approval record missing.")
     publication_date = plan.get("publish_on")
     if publication_date != now.date().isoformat():
-        fail("Plan is not approved for this Thursday.")
+        fail("Plan is not approved for today.")
     title = plan.get("title")
     recipes = plan.get("recipes")
     items = plan.get("items")
