@@ -20,8 +20,8 @@ def fail(message):
 
 def main():
     now = datetime.now(TZ)
-    if now.weekday() not in (3, 6) or now.hour < 8:
-        fail("Only Thursdays or Sundays after 08:00 Europe/Berlin are eligible.")
+    if now.weekday() not in (3, 5, 6) or now.hour < 8:
+        fail("Only Thursdays, Saturdays or Sundays after 08:00 Europe/Berlin are eligible.")
     if not PLAN_PATH.is_file():
         fail("No approved plan file exists.")
     plan = json.loads(PLAN_PATH.read_text(encoding="utf-8"))
