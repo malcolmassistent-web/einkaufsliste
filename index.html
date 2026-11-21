@@ -124,8 +124,15 @@ const mealPhotos=[
  {test:/chili/i,id:6544380},{test:/auflauf|kartoffel/i,id:6911885},
  {test:/gemüsepfanne/i,id:6544380},{test:/pizza/i,id:5848718}
 ];
-function mealPhoto(title){const hit=mealPhotos.find(p=>p.test.test(title));return 'https://images.pexels.com/photos/'+(hit?hit.id:6240973)+'/pexels-photo-'+(hit?hit.id:6240973)+'.jpeg?auto=compress&cs=tinysrgb&w=900'}
-function photoElement(title,large=false){const src=mealPhoto(title);if(!src)return null;const img=document.createElement('img');img.className=large?'meal-photo meal-photo-large':'meal-photo';img.src=src;img.alt='Beispielfoto zum Gericht '+title;img.loading='lazy';img.decoding='async';img.onerror=()=>img.remove();return img}
+const weeklyMealPhotos=[
+ {test:/griechischer kartoffel-feta-auflauf/i,url:'https://snapcalorie-webflow-website.s3.us-east-2.amazonaws.com/media/recipe_pics_v2/medium/greek_potato_bake.jpg',credit:'SnapCalorie'},
+ {test:/indisches linsen-dal/i,url:'https://cdn.foodfaithfitness.com/uploads/2024/11/red-lentil-curry-a-red_lentil_curry-feature-1-2-635x635.jpeg',credit:'Food Faith Fitness'},
+ {test:/spinat-ricotta-cannelloni/i,url:'https://snapcalorie-webflow-website.s3.us-east-2.amazonaws.com/media/food_pics_v2/medium/spinach_and_ricotta_cannelloni.jpg',credit:'SnapCalorie'},
+ {test:/blumenkohl-wings/i,url:'https://img.hellofresh.com/f_auto%2Cfl_lossy%2Ch_300%2Cq_auto%2Cw_450/hellofresh_s3/image/5c5140c5c445fa01dc6adb12-6cc99461.jpg',credit:'HelloFresh'},
+ {test:/kartoffel-lauch-suppe/i,url:'https://images.squarespace-cdn.com/content/v1/5326c064e4b011eeaa057a38/1593672435510-QE9LULSDZFVPBDV5OFE3/DSC09180-10_web.jpg?format=1000w',credit:'PS.Cafe'}
+];
+function mealPhoto(title){const weekly=weeklyMealPhotos.find(p=>p.test.test(title));if(weekly)return weekly.url;const hit=mealPhotos.find(p=>p.test.test(title));return 'https://images.pexels.com/photos/'+(hit?hit.id:6240973)+'/pexels-photo-'+(hit?hit.id:6240973)+'.jpeg?auto=compress&cs=tinysrgb&w=900'}
+function photoElement(title,large=false){const src=mealPhoto(title);if(!src)return null;const img=document.createElement('img');img.className=large?'meal-photo meal-photo-large':'meal-photo';img.src=src;img.alt='Beispielfoto zum Gericht '+title;const weekly=weeklyMealPhotos.find(p=>p.test.test(title));if(weekly)img.title='Beispielfoto: '+weekly.credit;img.loading='lazy';img.decoding='async';img.onerror=()=>img.remove();return img}
 function updateMealPreview(title,recipes){$('week-panel-title').textContent=title;$('overview-week-title').textContent=title;const wrap=$('overview-meals');wrap.replaceChildren();const days=['Mo','Di','Mi','Do','Fr'];(recipes||[]).slice(0,5).forEach((block,i)=>{const row=document.createElement('div');row.className='meal-row';const day=document.createElement('span');day.className='day-chip';day.textContent=days[i];const name=document.createElement('span');name.textContent=String(block).split('\n')[0].replace(/^(Montag|Dienstag|Mittwoch|Donnerstag|Freitag)\s*[·:–-]\s*/i,'');const photo=photoElement(name.textContent);row.append(day,name);if(photo)row.insertBefore(photo,name);wrap.append(row)});$('week-panel-meals').replaceChildren(...[...wrap.children].map(el=>{const copy=el.cloneNode(true);copy.setAttribute('role','button');copy.tabIndex=0;copy.title='Rezept öffnen';copy.addEventListener('click',()=>setPanel('recipes'));copy.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();setPanel('recipes')}});return copy}));}
 function renderWeek(data){
  $('week-label').textContent=data.title||'Aktuelle Woche';
