@@ -1,6 +1,10 @@
 name: Wochenplan donnerstags oder sonntags veroeffentlichen
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - approved/next-week.json
   schedule:
     # UTC: 06:00 Sommerzeit / 07:00 Winterzeit.
     # Beide Zeiten laufen, Python prueft lokale Uhrzeit und die Freigabe.
